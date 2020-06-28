@@ -1,0 +1,62 @@
+---
+title: "Global Financial Crisis (2007-2009): Global Impacts"
+author: "Tanvi Jindal, Ananya Munish and Kirtimay Pendse"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstract
+
+The Global Financial Crisis of 2007-09 was a direct result of the burst of the United States' housing market bubble. Due to an increase in the frequency of subprime mortgage loans, high default rates soon led to a collapse of the housing market and created a global recession. This project looks at the disparate effects of the recession on different economies- were there some countries that were affected more from the recession? Using the K-means method of clustering, we were able to 5 main groups of countries that were differentially affected by the recession. These clusters were in line with the real-world impacts across the globe. Our differences-in-differences model also made accurate predictions about the effects of certain variables across different groups (that we determined using the aforementioned method of clustering). The model suggests that the United States' sovereign debt exacerbated markedly compared to the control group.
+
+## Introduction
+
+The Financial Crisis of 2007-2009 originated in the United States due to the collapsing of the housing market bubble, uncontrollably high rates of subprime loans and mortgages, and an overall collapse of its financial markets. Since the turn of the century, private banks targeted high-risk borrowers (ones with high chances of defaulting on loans) with high-risk loans on housing with higher-than-usual interest rates and variable payment structures, putting borrowers at risk of bankruptcy. These loans were met with increasingly high demand, as Americans wanted to buy homes, leading to a cycle of subprime loans and risky payback schemes. As long as housing prices stayed high, the bubble managed to exist without causing any alarms; however, in late 2005, housing prices began to fall and the US Home Construction Index suffered a 40% hit. By 2007, the financial market failed to contain the subprime crisis, and effects began to be felt globally- the interbank market (global currency trading market) froze, waves of pessimism and fear hit, and private banks had to seek the Federal Banks' emergency funds to remain functional. Given the USA's position in the global economy, the impact of this crisis spread rapidly across the rest of the world. This crisis was considered the most severe global recession in the postwar period, as many developed economies faced decline, with emerging economies also following suit (Claessens and Kose, 2010). For our project, we want to evaluate these global impacts using certain macroeconomic variables that best encapsulate the effects of the economic downturn across nations. 
+
+## Method
+
+In order to capture the conditions before the recession, the effects of the crisis, and its aftermath, we decided to look at data from 2006-2011. We relied on the World Bank's databases for data on national savings, foreign direct investment (FDI) inflation rates and growth in the gross domestic product (GDP). Wanting to observe the real growth in GDP, we created a new variable that indexed nominal GDP growth by inflation rates. Statistics about trade balance were procured from the World Integrated Trade Solution (WITS) database, an intermediary of the World Bank. The International Monetary Fund (IMF) and the International Labor Organization (ILO) provided data on government (sovereign) debt and unemployment rates respectively. Prior to merging the datasets, many countries needed to be renamed to ensure uniformity and no loss of data when combining the datasets. 
+For processing and visualizing our data, we chose to use line graphs, scatter plots, clustering and a differences-in-differences (DID) estimates model, all of which can be found on our RShiny App. Our primary motivation to choose clustering as a method was to detect the inherent grouping factors within countries and see how these groups were variably affected by the recession. We used the K-means clustering method, an unsupervised learning method that creates clusters based on minimizing average cluster distances from their centers. We looked at the three methods for choosing the optimal number of clusters that are most suitable for K-means clustering: Elbow Method, Silhouette Method, and Gap-Statistic.
+Acknowledging that countries were indeed affected differently by the crisis, we employed a DID estimation strategy that allows us to measure the effect of the recession between groups. DID is a quasi-experimental design that allows one to make causal conclusions about a treatment and a control group using longitudinal data; we used Cluster 2 from the plot below.  Although our control group is synthetic and not natural by definition, it allowed us to analyze how different groups of countries were affected in relation to this base group of "relatively unaffected" countries (which we set as our control group), which is a worthwhile question to look in to. 
+
+## Results
+
+```{r pressure, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("graph1.png")
+```
+
+The Gap-Statistic method suggested using 1 cluster, which did not provide meaningful information. The Silhouette Method suggested using 6, but when they were displayed, one of the clusters consisted solely of Liberia (as it was an outlier). The Elbow Method suggested using 5 clusters (as seen above), which we finally chose as the optimal number of clusters to display. Here, dimension 1 consists of trade balance and FDI, and dimension 2 consists of real GDP growth and savings.
+We ran a DID model comparing Cluster 3 (the United States and the United Kingdom) with our control group (Cluster 2). We chose debt as our variable of interest because the debt levels in the United States rose infamously post the recession, which we thought would make for an interesting comparison. As we saw in our results table, the coefficient for treatment shows no significance, indicating that the groups were the same pre-recession. The coefficient for DID is highly significant which implies that the recession caused the groups to differ drastically with respect to changes in sovereign debt levels. 
+
+## Discussion
+
+The clusters we gained were in sync with our economic intuition. Cluster 1 seemed to have weathered the recession and shows improvement along both dimensions. This makes sense as it consists largely of rapidly emerging economies such as Hong Kong and South Korea, or isolated economies such as Palestine. Cluster 2 was our largest cluster and is largely centered around 0, implying that these countries were not significantly affected by the recession. Cluster 3 consists only of the United Kingdom and the United States; this group seems to be the most affected cluster, as they perform significantly worse on dimension 1 and show no improvement on the second dimension either. This result was expected as the recession started in the United States, and the United States has strong trade relations and a similar economic structure to the United Kingdom. At the time of the recession, there was a steep decline in FDI and trade balances; however, real GDP and savings did not take the hit we expected. This could be attributed to the Federal Reserve Bank artificially maintaining these rates through selling treasury notes and open market operations in order to cushion the economy from the crisis. Cluster 4 consists mostly of European economies that have strong trade relations as well with the United States, which is why they perform worse across dimension 1. Cluster 5 consists of countries that largely produce oil and other essential goods. These economies rely largely on exporting these goods to the rest of the world, especially the United States, and hence performed worse across dimension 2 (i.e. their savings and real GDP took a hit). Moreover, our DID model was a good choice in terms of measuring the impacts of economic shock, and our results were in line with the real-life impacts of the financial crisis. The United States debt levels exacerbated sharply in the aftermath of the crisis and our DID model was able to demonstrate this.
+
+## Limitations
+
+We believe our research has its limitations. To begin with, we only have a limited number of variables in our analysis and have left out other possible variables that could show the impact the recession had on particular countries. We had to tackle missing data for some countries as well, and we cannot be sure as to whether or not the quality of the data holds across the different countries. In our modeling, we used a difference-in-differences estimation method, which requires a control group that is not affected by the treatment (in this case, the recession) at all, but we had to choose a control group that was minimally affected by the recession (i.e. we are using a synthetic control group as opposed to a natural one). This measures how clusters of countries were affected in comparison to this control cluster, which we believe is a more interesting question to explore, as the control cluster does have the highest number of countries.
+
+##Appendix
+```{r}
+knitr::include_graphics('graph2.png')
+```
+
+##References
+
+IMF Datamapper. "Central Government Debt." IMF, Global Debt Databse, 2019, www.imf.org/external/datamapper/CG_DEBT_GDP@GDD/CHN/FRA/DEU/ITA/JPN/GBR/USA 
+
+ILO. "Unemployment Rate -- ILO Modelled Estimates, Nov. 2018." ILOSTAT, International Labor Organization, 2019, www.ilo.org/ilostat/faces/oracle/webcenter/portalapp/pagehierarchy/Page3.jspx;ILOSTATCOOKIE=1HDGrv78u_SYjai8Ur9cQOUkP6i8g5v_svlHnzgDGlu-T_A9vy8Z!-1292775148?MBI_ID=2&_adf.ctrl-state=2mpwlz6c3_4&_afrLoop=641046972875886&_afrWindowMode=0&_afrWindowId=null#!%40%40%3F_afrWindowId%3Dnull%26_afrLoop%3D641046972875886%26MBI_ID%3D2%26_afrWindowMode%3D0%26_adf.ctrl-state%3Dkxc1ofz55_4. 
+
+"Foreign Direct Investment, Net Inflows (BoP, Current US$)." The World Bank | Data, The World Bank, 2019, data.worldbank.org/indicator/bx.klt.dinv.cd.wd  
+
+"Top Exporters and Importers." World Integrated Trade Solution, World Bank, 2019, wits.worldbank.org/CountryProfile/en/Country/WLD/Year/2005/TradeFlow/EXPIMP.
+
+"Gross Savings (% of GDP)." The World Bank | Data, The World Bank, 2019, data.worldbank.org/indicator/ny.gns.ictr.zs.
+
+"GDP Growth (Annual %)." The World Bank | Data, The World Bank, 2019, data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG.
+
+"Inflation, GDP Deflator (Annual %)." The World Bank | Data, The World Bank, 2019, data.worldbank.org/indicator/ny.gdp.defl.kd.zg.
+
